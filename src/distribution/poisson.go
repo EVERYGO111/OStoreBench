@@ -28,3 +28,12 @@ func (ps *Poisson) Int64() int64 {
 	}
 	return k - 1
 }
+
+
+func (ps *Poisson)Float64() float64{
+	return 0
+}
+
+func (ps *Poisson)Uint64()uint64{
+	return 0
+}

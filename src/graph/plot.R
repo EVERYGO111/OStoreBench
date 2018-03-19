@@ -1,7 +1,7 @@
 #!/usr/bin/env RScript
 
 data <- scan("data")
-x <- c(1,len(data))
+x <- c(1,length(data))
 
-plot(y,x)
+plot(data,x)
 

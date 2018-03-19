@@ -26,3 +26,11 @@ func (e *Exp) Float64() float64 {
 	}
 	return -e.lambdar * math.Log(z)
 }
+
+func (e *Exp) Int64() int64 {
+	return 0
+}
+
+func (e *Exp) Uint64() uint64 {
+	return 0
+}
