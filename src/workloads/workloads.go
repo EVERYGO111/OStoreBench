@@ -111,7 +111,7 @@ func (w *Workload) nextFid(zipf distribution.Distribution) string {
 		//w.RwLock.RLock()
 		//fmt.Printf("index:%d, len:%d\n", index, len(w.fids))
 		if index >= uint64(len(w.fids)) {
-			time.Sleep(1 * time.Second)
+			time.Sleep(1 * time.Microsecond) //if not sleep, there will be an fatal error!!!
 			continue
 		}
 		fid := w.fids[index]
