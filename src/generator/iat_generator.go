@@ -1,9 +1,13 @@
 package generator
 
-import "distribution"
+import (
+	"distribution"
+	"sync"
+)
 
 type IATGenerator struct {
 	distri distribution.Distribution
+	sync.Mutex
 }
 
 func NewIATGenerator(distr string) *IATGenerator {
@@ -15,6 +19,8 @@ func NewIATGenerator(distr string) *IATGenerator {
 }
 
 func (g *IATGenerator) Uint64() uint64 {
+	g.Lock()
+	defer g.Lock()
 	if g.distri != nil {
 		return g.distri.Uint64()
 	}

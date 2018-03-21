@@ -28,9 +28,9 @@ func (e *Exp) Float64() float64 {
 }
 
 func (e *Exp) Int64() int64 {
-	return 0
+	return int64(e.Float64())
 }
 
 func (e *Exp) Uint64() uint64 {
-	return 0
+	return uint64(e.Float64())
 }

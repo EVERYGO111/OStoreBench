@@ -1,11 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"driver"
 	"log"
-	"math/rand"
 	"net"
-	"time"
+	"workloads"
 )
 
 const (
@@ -23,14 +22,14 @@ func sendRequest() {
 }
 
 func main() {
-	r := rand.New(rand.NewSource(int64(time.Now().Second())))
-	zipf := rand.NewZipf(r, 2.7, 1048576/5, 1048576)
-	// data := make([]int, 0)
-	for i := 0; i != MAX_FILE_COUNT; i++ {
-		item := int(zipf.Uint64())
-		fmt.Println(item)
-		//data = append(data, item)
-	}
+	//r := rand.New(rand.NewSource(int64(time.Now().Second())))
+	//zipf := rand.NewZipf(r, 2.7, 1048576/5, 1048576)
+	//// data := make([]int, 0)
+	//for i := 0; i != MAX_FILE_COUNT; i++ {
+	//	item := int(zipf.Uint64())
+	//	fmt.Println(item)
+	//	//data = append(data, item)
+	//}
 
 	// p := distribution.NewNegativeExp(1000 / 50)
 	// data := make([]int64, 0)
@@ -47,4 +46,27 @@ func main() {
 	//client := driver.NewHTTPClient("localhost", 8000)
 	//w := workloads.NewPoissonWorkloads(50, 10485760, MAX_FILE_COUNT, client)
 	//w.Start()
+
+	type WorkloadConfig struct {
+		rwRate       float64 //R/W rate
+		totalProcess int64   //total goroutine
+
+		driver       driver.Driver
+		fileSizeType workloads.DistributionType
+		iatType      workloads.DistributionType
+		requestType  workloads.DistributionType
+
+		requestNum int64
+	}
+	workloadConf := workloads.WorkloadConfig{
+		WriteRate:       0.3,
+		TotalProcess: 10,
+		Driver:       driver.NewFakeDriver("localhost", 8000),
+		FileSizeType: workloads.ZIPF,
+		IatType:      workloads.NEGATIVE_EXP,
+		RequestType:  workloads.LOGNORMAL,
+		RequestNum:   10000,
+	}
+	workloads := workloads.NewWorkload(workloadConf)
+	workloads.Start()
 }
