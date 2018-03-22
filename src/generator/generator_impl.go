@@ -13,7 +13,7 @@ type GeneratorImpl struct {
 func NewGeneratorImpl(distr string) *GeneratorImpl {
 	switch distr {
 	case "NegativeExp":
-		return &GeneratorImpl{distri: distribution.NewNegativeExp(50)}
+		return &GeneratorImpl{distri: distribution.NewNegativeExp(0.05)}
 	case "zipf":
 		return &GeneratorImpl{distri: distribution.NewZipf(1.5, 2, 64*1024*1024)}
 	}

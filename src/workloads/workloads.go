@@ -50,8 +50,7 @@ type Workload struct {
 	l      sync.Mutex
 	RwLock sync.RWMutex
 
-	ReadPool  *ConcurrentPool
-	WritePool *ConcurrentPool
+	RequestPool *ConcurrentPool
 
 	curRequestNum int64
 	slock         sync.Mutex //for status update
@@ -81,8 +80,7 @@ func NewWorkload(config WorkloadConfig) *Workload {
 	w.WriteProcess = int64(config.WriteRate * float64(config.TotalProcess))
 	w.ReadProcess = config.TotalProcess - w.WriteProcess
 	w.RequestNum = config.RequestNum
-	w.ReadPool = NewConcurrentPool()
-	w.WritePool = NewConcurrentPool()
+	w.RequestPool = NewConcurrentPool()
 
 	return w
 }
@@ -111,7 +109,7 @@ func (w *Workload) nextFid(zipf distribution.Distribution) string {
 		//w.RwLock.RLock()
 		//fmt.Printf("index:%d, len:%d\n", index, len(w.fids))
 		if index >= uint64(len(w.fids)) {
-			time.Sleep(1 * time.Microsecond) //if not sleep, there will be an fatal error!!!
+			time.Sleep(1 * time.Microsecond) //if not sleep, there will be a fatal error!!!
 			continue
 		}
 		fid := w.fids[index]
@@ -120,74 +118,67 @@ func (w *Workload) nextFid(zipf distribution.Distribution) string {
 	}
 }
 
-func (w *Workload) writeFiles(iatg generator.Generator, wg *sync.WaitGroup) {
-	for i := int64(1); i <= w.WriteProcess; i++ {
-		wg.Add(1)
-		go func() {
-			for {
-				fileKey, err := w.driver.Put("weed_test_"+time.Now().String(), int64(w.fileSizeGenerator.Uint64()))
-				if err != nil {
-					fmt.Printf("%v\n", err)
-				} else {
-					fmt.Printf("%v\n", fileKey)
-					w.appendFid(fileKey)
-				}
-				wlock.Lock()
-				writeCnt++
-
-				wlock.Unlock()
-				w.slock.Lock()
-				w.curRequestNum++
-				if w.curRequestNum >= w.RequestNum {
-					w.slock.Unlock()
-					break
-				}
-				w.slock.Unlock()
-				time.Sleep(time.Duration(iatg.Uint64()) * time.Microsecond)
-			}
-			wg.Done()
-		}()
-	}
-
-}
-
-func (w *Workload) readFiles(iatg generator.Generator, wg *sync.WaitGroup) {
-	zipf := distribution.NewZipf(1.5, 2, 100000)
+func (w *Workload) readFiles(wg *sync.WaitGroup, requestChan chan interface{}, requestDone chan bool) {
+	zipf := distribution.NewZipf(1.5, 2, uint64(w.RequestNum))
 	for i := int64(1); i <= w.ReadProcess; i++ {
 		wg.Add(1)
 		go func() {
 			for {
-				if _, err := w.driver.Get(w.nextFid(zipf)); err != nil {
-					fmt.Printf("%v\n", err)
+				select {
+				case <-requestChan:
+					if _, err := w.driver.Get(w.nextFid(zipf)); err != nil {
+						fmt.Printf("%v\n", err)
+					}
+					rlock.Lock()
+					readCnt++
+					rlock.Unlock()
+				case <-requestDone:
+					wg.Done()
+					return
 				}
-				rlock.Lock()
-				readCnt++
-				rlock.Unlock()
-
-				//update status
-				w.slock.Lock()
-				w.curRequestNum++
-				if w.curRequestNum >= w.RequestNum {
-					w.slock.Unlock()
-					break
-				}
-				w.slock.Unlock()
-				time.Sleep(time.Duration(iatg.Uint64()) * time.Microsecond)
 			}
-			wg.Done()
 		}()
 	}
 }
 
-//func (w *Workload) generateWaitTime(waitTimeChan chan time.Duration, wg *sync.WaitGroup) {
-//	fmt.Printf("generate waittime\n")
-//	for i := int64(1); i <= w.RequestNum; i++ {
-//		waitTimeChan <- time.Duration(w.iatGenerator.Uint64())
-//	}
-//	wg.Done()
-//	close(waitTimeChan)
-//}
+func (w *Workload) writeFiles(wg *sync.WaitGroup, requestChan chan interface{}, requestDone chan bool) {
+	for i := int64(1); i <= w.WriteProcess; i++ {
+		wg.Add(1)
+		go func() {
+			for {
+				select {
+				case <-requestChan:
+					fileKey, err := w.driver.Put("weed_test_"+time.Now().String(), int64(w.fileSizeGenerator.Uint64()))
+					if err != nil {
+						fmt.Printf("%v\n", err)
+					} else {
+						//fmt.Printf("%v\n", fileKey)
+						w.appendFid(fileKey)
+					}
+					wlock.Lock()
+					writeCnt++
+					wlock.Unlock()
+				case <-requestDone:
+					wg.Done()
+					return
+				}
+			}
+		}()
+	}
+}
 
+func (w *Workload) generateRequest(wg *sync.WaitGroup, requestChan chan interface{}) {
+	for i := int64(0); i < w.RequestNum; i++ {
+		requestChan <- 1
+		t := w.iatGenerator.Uint64()
+		fmt.Println(t)
+		time.Sleep(time.Duration(t) * time.Microsecond)
+	}
+	//totalprocess+1
+	for i := int64(0); i <= w.TotalProcess; i++ {
+		wg.Done()
+	}
+}
 func (w *Workload) Start() {
 	//1. iat间隔
 	//2. 文件大小
@@ -196,11 +187,13 @@ func (w *Workload) Start() {
 	writeCnt = 0
 	fmt.Printf("start workload\n")
 	wg := &sync.WaitGroup{}
-	//waitTimeChan := make(chan time.Duration, w.TotalProcess)
-	//wg.Add(1)
-	//go w.generateWaitTime(waitTimeChan, wg)
-	w.readFiles(w.iatGenerator, wg)
-	w.writeFiles(w.iatGenerator, wg)
+	requestChan := make(chan interface{})
+	requestDone := make(chan bool)
+	wg.Add(1)
+	go w.generateRequest(wg, requestChan)
+	w.readFiles(wg, requestChan, requestDone)
+	w.writeFiles(wg, requestChan, requestDone)
+
 	wg.Wait()
 	fmt.Printf("ReadProcess:%d, WriteProcess:%d, ReadCount:%d, WriteCount:%d\n", w.ReadProcess, w.WriteProcess, readCnt, writeCnt)
 }

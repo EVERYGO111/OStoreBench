@@ -14,8 +14,8 @@ type Exp struct {
 
 // NewNegativeExp create struct Exp
 // lambdar =  1 / lambda
-func NewNegativeExp(lambdar float64) *Exp {
-	return &Exp{lambdar: lambdar, rd: rand.New(rand.NewSource(int64(time.Now().Second())))}
+func NewNegativeExp(lambda float64) *Exp {
+	return &Exp{lambdar: 1/lambda, rd: rand.New(rand.NewSource(int64(time.Now().Second())))}
 }
 
 // Float64 return a float64 number
@@ -24,7 +24,8 @@ func (e *Exp) Float64() float64 {
 	for z == 0 || z == 1 {
 		z = e.rd.Float64()
 	}
-	return -e.lambdar * math.Log(z)
+	//fmt.Printf("z:%f,log:%f\n", 1-z,math.Log(1-z))
+	return -e.lambdar * math.Log(1-z)
 }
 
 func (e *Exp) Int64() int64 {

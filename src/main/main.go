@@ -47,26 +47,28 @@ func main() {
 	//w := workloads.NewPoissonWorkloads(50, 10485760, MAX_FILE_COUNT, client)
 	//w.Start()
 
-	type WorkloadConfig struct {
-		rwRate       float64 //R/W rate
-		totalProcess int64   //total goroutine
+	//分布可调负载
+	//workloadConf := workloads.WorkloadConfig{
+	//	WriteRate:    0.3,
+	//	TotalProcess: 10,
+	//	Driver:       driver.NewFakeDriver("localhost", 8000),
+	//	FileSizeType: workloads.ZIPF,
+	//	IatType:      workloads.NEGATIVE_EXP, //the request rate will be lognormal distribution
+	//	RequestType:  workloads.LOGNORMAL,
+	//	RequestNum:   1000000,
+	//}
+	//workloads := workloads.NewWorkload(workloadConf)
+	//workloads.Start()
 
-		driver       driver.Driver
-		fileSizeType workloads.DistributionType
-		iatType      workloads.DistributionType
-		requestType  workloads.DistributionType
-
-		requestNum int64
+	//归档负载
+	archWorkloadConf := workloads.ArchiveWorkloadConfig{
+		RequestGroups:    100,
+		GroupInteralTime: 5,
+		MinFileSize:      10,
+		MaxFileSize:      1024,
+		MaxFilesPerGroup: 10,
+		ProcessNum:       16,
 	}
-	workloadConf := workloads.WorkloadConfig{
-		WriteRate:       0.3,
-		TotalProcess: 10,
-		Driver:       driver.NewFakeDriver("localhost", 8000),
-		FileSizeType: workloads.ZIPF,
-		IatType:      workloads.NEGATIVE_EXP,
-		RequestType:  workloads.LOGNORMAL,
-		RequestNum:   10000,
-	}
-	workloads := workloads.NewWorkload(workloadConf)
-	workloads.Start()
+	workload := workloads.NewArchWorkload(driver.NewFakeDriver("localhost", 8000), &archWorkloadConf)
+	workload.Start()
 }
