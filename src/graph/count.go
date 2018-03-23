@@ -37,6 +37,7 @@ func main() {
 			break
 		}
 		tms := parseTime(string(a))
+        fmt.Printf("%d\n",tms)
 		// fmt.Println(tms)
 		if beginTime == 0 {
 			beginTime = tms
@@ -52,8 +53,8 @@ func main() {
 		}
 	}
 	data = append(data, currentCount)
-	for i := 0; i < len(data); i++ {
-		fmt.Println(data[i])
-	}
+    //for i := 0; i < len(data); i++ {
+	//	fmt.Println(data[i])
+	//}
 	defer fp.Close()
 }
