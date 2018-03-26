@@ -94,10 +94,10 @@ func printTime(slice *common.ConcurrentSlice, tips string) {
 	if slice == nil {
 		return
 	}
-	sum, min, max := int64(0), int64(math.MaxInt64), int64(0)
+	sum, min, max := float64(0), float64(math.MaxInt64), float64(0)
 	for d := range slice.Iter() {
 		if t, ok := d.Value.(time.Duration); ok {
-			dMs := int64(t / 1000000)
+			dMs := float64(t) / 1000000
 			if dMs < min {
 				min = dMs
 			}
@@ -110,11 +110,11 @@ func printTime(slice *common.ConcurrentSlice, tips string) {
 			continue
 		}
 	}
-	avg := float64(sum) / float64(slice.Len())
+	avg := sum / float64(slice.Len())
 	varianceSum := 0.0
 	for d := range slice.Iter() {
 		if t, ok := d.Value.(time.Duration); ok {
-			dMs := int64(t / 1000000)
+			dMs := float64(t) / 1000000
 			diff := float64(dMs) - avg
 			varianceSum += diff * diff
 
@@ -126,5 +126,5 @@ func printTime(slice *common.ConcurrentSlice, tips string) {
 	std := math.Sqrt(varianceSum / float64(slice.Len()))
 	fmt.Printf("\n%s\n", tips)
 	fmt.Printf("           min     avg      max     std\n")
-	fmt.Printf("Total:     %d      %.2f       %d      %.2f\n", min, avg, max, std)
+	fmt.Printf("Total:     %.2f      %.2f       %.2f      %.2f\n", min, avg, max, std)
 }
