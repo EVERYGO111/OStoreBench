@@ -35,37 +35,53 @@ func NewArchWorkload(driver driver.Driver, conf *ArchiveWorkloadConfig) *ArchWor
 	return w
 }
 
-func (w *ArchWorkload) generateGroups(requestGroup chan interface{}) {
+func (w *ArchWorkload) sendRequest(wg *sync.WaitGroup, s *stats, index int) {
 	for i := 0; i < w.config.RequestGroups; i++ {
-		requestGroup <- 1
-	}
-}
-
-func (w *ArchWorkload) sendRequest(requestChan chan interface{}, wg *sync.WaitGroup) {
-	r := rand.New(rand.NewSource(int64(time.Now().Second())))
-	rqNum := r.Intn(w.config.MaxFilesPerGroup) + 1
-	for i := 0; i < rqNum; i++ {
-		fileSize := r.Int63n(w.config.MaxFileSize-w.config.MinFileSize) + w.config.MinFileSize
-		fileName := fmt.Sprintf("weed_archive_%d.txt", time.Now().UnixNano())
-		fileKey, err := w.driver.Put(fileName, fileSize)
-		if err != nil {
-			fmt.Printf("Write file error:%v\n", err)
-			continue
+		r := rand.New(rand.NewSource(int64(time.Now().Second())))
+		rqNum := r.Intn(w.config.MaxFilesPerGroup) + 1
+		for i := 0; i < rqNum; i++ {
+			fileSize := r.Int63n(w.config.MaxFileSize-w.config.MinFileSize) + w.config.MinFileSize
+			fileName := fmt.Sprintf("weed_archive_%d.txt", time.Now().UnixNano())
+			start := time.Now()
+			_, err := w.driver.Put(fileName, fileSize)
+			if err != nil {
+				fmt.Printf("Write file error:%v\n", err)
+				s.localStats[i].failed++
+				continue
+			}
+			s.WriteTime.Append(time.Now().Sub(start))
+			s.localStats[index].transferred += fileSize
+			s.WriteFileSize.Append(fileSize)
+			//fmt.Printf("Put file %v\n", fileKey)
 		}
-		fmt.Printf("Put file %v\n", fileKey)
+		s.localStats[index].completed++
 	}
 	wg.Done()
 }
 
+// spawn w.config.ProcessNum goroutine,
+// each process will send w.config.requestGroups group requests,
+// which contains random count reqeuests in one group
 func (w *ArchWorkload) Start() {
-	var wg sync.WaitGroup
-	requestGroupChan := make(chan interface{})
+	stats := NewStas(int(w.config.ProcessNum))
+	stats.total = int64(w.config.RequestGroups * w.config.ProcessNum)
+	stats.start = time.Now()
 
+	var wg sync.WaitGroup
 	for i := 0; i < w.config.ProcessNum; i++ {
 		wg.Add(1)
-		go w.sendRequest(requestGroupChan, &wg)
-		time.Sleep(time.Duration(w.config.GroupInteralTime) * time.Second)
+		go w.sendRequest(&wg, stats, i)
 	}
 
+	finishDone := make(chan bool)
+	svg := &sync.WaitGroup{}
+	svg.Add(1)
+	go stats.CheckProgress("Arch workload", finishDone, svg)
 	wg.Wait()
+	stats.end = time.Now()
+
+	finishDone <- true
+	svg.Wait()
+
+	stats.PrintStats()
 }

@@ -125,6 +125,6 @@ func printTime(slice *common.ConcurrentSlice, tips string) {
 	}
 	std := math.Sqrt(varianceSum / float64(slice.Len()))
 	fmt.Printf("\n%s\n", tips)
-	fmt.Printf("           min     avg      max     std\n")
+	fmt.Printf("           min       avg        max       std\n")
 	fmt.Printf("Total:     %.2f      %.2f       %.2f      %.2f\n", min, avg, max, std)
 }
