@@ -1,7 +1,7 @@
 package driver
 
 import (
-	"github.com/linxGnu/goseaweedfs"
+	"github.com/KDF5000/goseaweedfs"
 	"math/rand"
 	"time"
 	"utils"

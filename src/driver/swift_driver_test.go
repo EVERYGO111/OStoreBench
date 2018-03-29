@@ -27,5 +27,4 @@ func TestSwiftBasic(t *testing.T) {
 		panic(err)
 	}
 	fmt.Printf("Get file %s ,length:%d\n", fileKey, len(data))
-
 }
