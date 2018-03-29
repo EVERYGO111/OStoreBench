@@ -17,7 +17,7 @@ func NewWeeDriver(master string) *WeedDriver {
 	}
 }
 
-func (w *WeedDriver) Get(key string) ([]byte, error) {
+func (w *WeedDriver) Get(bucket string, key string) ([]byte, error) {
 	byteRead, err := w.client.GetFile(key)
 	if err != nil {
 		return nil, err
@@ -25,7 +25,7 @@ func (w *WeedDriver) Get(key string) ([]byte, error) {
 	return byteRead, nil
 }
 
-func (w *WeedDriver) Put(fileName string, fileSize int64) (fileKey string, err error) {
+func (w *WeedDriver) Put(bucket string, fileName string, fileSize int64) (fileKey string, err error) {
 	_, fileId, err := w.client.Upload(utils.NewFakeReader(rand.Uint64(), fileSize), fileName, fileSize, "", "")
 	if err != nil {
 		return "", err
@@ -33,7 +33,7 @@ func (w *WeedDriver) Put(fileName string, fileSize int64) (fileKey string, err e
 	return fileId, nil
 }
 
-func (w *WeedDriver) Delete(key string) error {
+func (w *WeedDriver) Delete(bucket string, key string) error {
 	if err := w.client.DeleteFile(key, nil); err != nil {
 		return err
 	}

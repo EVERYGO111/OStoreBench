@@ -11,6 +11,10 @@ import (
 	"time"
 )
 
+const (
+	BucketName = "test"
+)
+
 type ArchiveWorkloadConfig struct {
 	RequestGroups    int   //total groups
 	GroupInteralTime int   //second
@@ -43,7 +47,7 @@ func (w *ArchWorkload) sendRequest(wg *sync.WaitGroup, s *stats, index int) {
 			fileSize := r.Int63n(w.config.MaxFileSize-w.config.MinFileSize) + w.config.MinFileSize
 			fileName := fmt.Sprintf("weed_archive_%d.txt", time.Now().UnixNano())
 			start := time.Now()
-			_, err := w.driver.Put(fileName, fileSize)
+			_, err := w.driver.Put(BucketName, fileName, fileSize)
 			if err != nil {
 				fmt.Printf("Write file error:%v\n", err)
 				s.localStats[i].failed++
