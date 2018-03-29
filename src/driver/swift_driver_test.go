@@ -15,7 +15,7 @@ func TestSwiftBasic(t *testing.T) {
 		"demo", //project name in V3
 	)
 
-	fileName := fmt.Sprint("swift_%d.txt", time.Now().UnixNano())
+	fileName := fmt.Sprintf("swift_%d.txt", time.Now().UnixNano())
 	fileKey, err := driver.Put("container1", fileName, 1024)
 	if err != nil {
 		panic(err)
