@@ -2,23 +2,100 @@ package main
 
 import (
 	"driver"
-	"log"
-	"net"
+	"flag"
+	"fmt"
+	"math/rand"
+	"runtime"
+	"time"
 	"workloads"
 )
 
 const (
 	// MAX_FILE_COUNT is the max count of files
-	MAX_FILE_COUNT = 1048576
+	MAX_FILE_COUNT  = 1048576
+	ONLINE_SERVICE  = "OnlineService"
+	ARCHIVE_SERVICE = "Archive"
 )
 
-func sendRequest() {
-	conn, err := net.Dial("tcp", "localhost:8000")
-	if err != nil {
-		log.Fatal(err)
+type BenchmarkOptions struct {
+	target      *string
+	concurrency *int
+
+	//for haystack
+	server *string
+
+	//for swift
+	authUrl  *string
+	username *string
+	apiKey   *string
+	domain   *string
+	project  *string
+
+	workloadType *string
+	filesize     *int
+}
+
+var (
+	b BenchmarkOptions
+)
+
+func init() {
+	b.target = flag.String("target", "weed", "weed, swift or ceph")
+	b.server = flag.String("server", "localhost:9333", "server ip")
+	b.concurrency = flag.Int("c", 16, "number of cocurrent read and write process")
+	b.authUrl = flag.String("authUrl", "http://localhost:5000/v3", "auth url for swift")
+	b.username = flag.String("username", "demo", "username for swift")
+	b.apiKey = flag.String("apikey", "123456", "pasword or api key issued by the provider")
+	b.domain = flag.String("domain", "default", "domain for swift")
+	b.project = flag.String("project", "demo", "project name for swift")
+	b.workloadType = flag.String("t", ONLINE_SERVICE, "1: OnlineService, 2: Archive ")
+	b.filesize = flag.Int("filesize", 10240, "maximum file size")
+	flag.Parse()
+}
+func benchOnlineservice(driver driver.Driver) {
+	//分布可调负载
+	workloadConf := workloads.WorkloadConfig{
+		WriteRate:    0.3,
+		TotalProcess: int64(*b.concurrency),
+		//Driver:       driver.NewWeeDriver("localhost:9333"),
+		Driver:       driver,
+		FileSizeType: workloads.ZIPF,
+		IatType:      workloads.NEGATIVE_EXP, //the request rate will be lognormal distribution
+		RequestType:  workloads.LOGNORMAL,
+		RequestNum:   10000,
 	}
-	conn.Write([]byte("hello world"))
-	conn.Close()
+	workloads := workloads.NewWorkload(workloadConf)
+	workloads.Start()
+}
+
+func benchArchiveService(driver driver.Driver) {
+	//归档负载
+	archWorkloadConf := workloads.ArchiveWorkloadConfig{
+		RequestGroups:    100,
+		GroupInteralTime: 5,
+		MinFileSize:      10,
+		MaxFileSize:      1024,
+		MaxFilesPerGroup: 10,
+		ProcessNum:       *b.concurrency,
+	}
+	//workload := workloads.NewArchWorkload(driver.NewFakeDriver("localhost", 8000), &archWorkloadConf)
+	workload := workloads.NewArchWorkload(driver, &archWorkloadConf)
+	workload.Start()
+}
+
+func loadDriverByType(t string) (driver.Driver, error) {
+	switch t {
+	case "weed":
+		return driver.NewWeeDriver(*b.server), nil
+	case "swift":
+		return driver.NewSwiftDriver(*b.username, *b.apiKey, *b.authUrl, *b.domain, *b.project), nil
+	case "ceph":
+
+		return nil, fmt.Errorf("Ceph driver has not been implemented yet!")
+	default:
+
+		return nil, fmt.Errorf("Ceph driver has not been implemented yet!")
+	}
 }
 
 func main() {
@@ -62,15 +139,30 @@ func main() {
 	//workloads.Start()
 
 	//归档负载
-	archWorkloadConf := workloads.ArchiveWorkloadConfig{
-		RequestGroups:    100,
-		GroupInteralTime: 5,
-		MinFileSize:      10,
-		MaxFileSize:      1024,
-		MaxFilesPerGroup: 10,
-		ProcessNum:       16,
+	//archWorkloadConf := workloads.ArchiveWorkloadConfig{
+	//	RequestGroups:    100,
+	//	GroupInteralTime: 5,
+	//	MinFileSize:      10,
+	//	MaxFileSize:      1024,
+	//	MaxFilesPerGroup: 10,
+	//	ProcessNum:       16,
+	//}
+	////workload := workloads.NewArchWorkload(driver.NewFakeDriver("localhost", 8000), &archWorkloadConf)
+	//workload := workloads.NewArchWorkload(driver.NewSwiftDriver("demo", "123456", "http://172.16.1.92:5000/v3", "default", "demo"), &archWorkloadConf)
+	//workload.Start()
+	//
+	rand.Seed(time.Now().UnixNano())
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
+	driver, err := loadDriverByType(*b.target)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return
 	}
-	//workload := workloads.NewArchWorkload(driver.NewFakeDriver("localhost", 8000), &archWorkloadConf)
-	workload := workloads.NewArchWorkload(driver.NewSwiftDriver("demo","123456","http://172.16.1.92:5000/v3","default","demo"), &archWorkloadConf)
-	workload.Start()
+	switch *b.workloadType {
+	case ONLINE_SERVICE:
+		benchOnlineservice(driver)
+	case ARCHIVE_SERVICE:
+		benchArchiveService(driver)
+	}
 }

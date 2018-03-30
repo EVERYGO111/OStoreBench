@@ -190,7 +190,6 @@ func (w *Workload) Start() {
 	//1. iat间隔
 	//2. 文件大小
 	//3. 读写比例
-	fmt.Printf("start workload\n")
 	wg := &sync.WaitGroup{}
 	requestChan := make(chan interface{})
 	requestDone := make(chan bool)
