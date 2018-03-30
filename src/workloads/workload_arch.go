@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	BucketName = "test"
+	BucketName = "container1"
 )
 
 type ArchiveWorkloadConfig struct {
