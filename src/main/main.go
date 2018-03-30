@@ -56,7 +56,7 @@ func main() {
 		FileSizeType: workloads.ZIPF,
 		IatType:      workloads.NEGATIVE_EXP, //the request rate will be lognormal distribution
 		RequestType:  workloads.LOGNORMAL,
-		RequestNum:   10000,
+		RequestNum:   100,
 	}
 	workloads := workloads.NewWorkload(workloadConf)
 	workloads.Start()

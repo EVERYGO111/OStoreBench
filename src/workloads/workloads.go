@@ -131,7 +131,7 @@ func (w *Workload) readFiles(wg *sync.WaitGroup, requestChan chan interface{}, r
 						s.ReadTime.Append(time.Now().Sub(start))
 					} else {
 						st.failed++
-						fmt.Printf("%v\n", err)
+						fmt.Printf("Get:%v\n", err)
 					}
 				case <-requestDone:
 					wg.Done()
@@ -160,7 +160,7 @@ func (w *Workload) writeFiles(wg *sync.WaitGroup, requestChan chan interface{}, 
 						s.WriteTime.Append(time.Now().Sub(start))
 					} else {
 						st.failed++
-						fmt.Printf("%v\n", err)
+						fmt.Printf("Put:%v\n", err)
 					}
 				case <-requestDone:
 					wg.Done()
