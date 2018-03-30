@@ -150,7 +150,7 @@ func (w *Workload) writeFiles(wg *sync.WaitGroup, requestChan chan interface{}, 
 				select {
 				case <-requestChan:
 					fileName := "weed_test_" + time.Now().String()
-					fileSize := w.fileSizeGenerator.Uint64()
+					fileSize := w.fileSizeGenerator.Uint64() + 1 // filesize can not be 0
 					start := time.Now()
 					if fileKey, err := w.driver.Put(BucketName, fileName, int64(fileSize)); err == nil {
 						w.appendFid(fileKey)
