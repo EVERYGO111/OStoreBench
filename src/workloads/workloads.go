@@ -123,7 +123,7 @@ func (w *Workload) readFiles(wg *sync.WaitGroup, requestChan chan interface{}, r
 				case <-requestChan:
 					key := w.nextFid(zipf)
 					start := time.Now()
-					if bytesRead, err := w.driver.Get(key); err == nil {
+					if bytesRead, err := w.driver.Get(BucketName, key); err == nil {
 						st.completed++
 						st.transferred += int64(len(bytesRead))
 						s.ReadFileIds.Append(key)
@@ -152,7 +152,7 @@ func (w *Workload) writeFiles(wg *sync.WaitGroup, requestChan chan interface{}, 
 					fileName := "weed_test_" + time.Now().String()
 					fileSize := w.fileSizeGenerator.Uint64()
 					start := time.Now()
-					if fileKey, err := w.driver.Put(fileName, int64(fileSize)); err == nil {
+					if fileKey, err := w.driver.Put(BucketName, fileName, int64(fileSize)); err == nil {
 						w.appendFid(fileKey)
 						st.completed++
 						st.transferred += int64(fileSize)
