@@ -4,7 +4,6 @@ import (
 	"github.com/ncw/swift"
 	"math/rand"
 	"utils"
-        "fmt"
 )
 
 type SwiftDriver struct {
