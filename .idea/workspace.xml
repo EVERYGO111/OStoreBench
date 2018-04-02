@@ -5,10 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24ac14ab-7512-479a-8e43-f9e212ee6309" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/generator/generator_impl.go" afterPath="$PROJECT_DIR$/src/generator/generator_impl.go" />
-      <change beforePath="$PROJECT_DIR$/src/github.com/linxGnu/goseaweedfs" afterPath="$PROJECT_DIR$/src/github.com/linxGnu/goseaweedfs" />
-      <change beforePath="$PROJECT_DIR$/src/main/benchmark.go" afterPath="$PROJECT_DIR$/src/main/benchmark.go" />
-      <change beforePath="$PROJECT_DIR$/src/workloads/stats.go" afterPath="$PROJECT_DIR$/src/workloads/stats.go" />
       <change beforePath="$PROJECT_DIR$/src/workloads/workloads.go" afterPath="$PROJECT_DIR$/src/workloads/workloads.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,8 +19,8 @@
       <file leaf-file-name="workloads.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/workloads/workloads.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="231" column="9" lean-forward="true" selection-start-line="231" selection-start-column="9" selection-end-line="231" selection-end-column="9" />
+            <state relative-caret-position="512">
+              <caret line="73" column="29" lean-forward="false" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
               <folding>
                 <element signature="e#19#107#0" expanded="true" />
               </folding>
@@ -65,8 +61,8 @@
       <file leaf-file-name="benchmark.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/benchmark.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-665">
-              <caret line="84" column="22" lean-forward="false" selection-start-line="84" selection-start-column="22" selection-end-line="84" selection-end-column="22" />
+            <state relative-caret-position="245">
+              <caret line="54" column="37" lean-forward="false" selection-start-line="54" selection-start-column="31" selection-end-line="54" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -660,22 +656,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/generator/generator.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/generator/iat_generator.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="8" column="27" lean-forward="false" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/workloads/stats.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-705">
@@ -686,8 +666,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/benchmark.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-665">
-          <caret line="84" column="22" lean-forward="false" selection-start-line="84" selection-start-column="22" selection-end-line="84" selection-end-column="22" />
+        <state relative-caret-position="245">
+          <caret line="54" column="37" lean-forward="false" selection-start-line="54" selection-start-column="31" selection-end-line="54" selection-end-column="37" />
           <folding />
         </state>
       </provider>
@@ -700,10 +680,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/generator/iat_generator.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="8" column="27" lean-forward="false" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/generator/generator.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="4" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/workloads/workloads.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="231" column="9" lean-forward="true" selection-start-line="231" selection-start-column="9" selection-end-line="231" selection-end-column="9" />
+        <state relative-caret-position="512">
+          <caret line="73" column="29" lean-forward="false" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
           <folding>
             <element signature="e#19#107#0" expanded="true" />
           </folding>

@@ -71,7 +71,7 @@ func loadGeneratorByType(t DistributionType) generator.Generator {
 	default:
 		args["s"] = float64(1.5)
 		args["v"] = float64(2)
-		args["imax"] = float64(64 * 1024 * 1024)
+		args["imax"] = uint64(64 * 1024 * 1024)
 		return generator.NewGeneratorImpl("zipf", args)
 	}
 }
