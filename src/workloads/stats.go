@@ -64,7 +64,7 @@ func (s *stats) CheckProgress(testName string, finishChan chan bool, wg *sync.Wa
 	}
 }
 
-func (s *stats) PrintStats() {
+func (s *stats) PrintStats(process func(times *common.ConcurrentSlice, tag string)) {
 	completed, failed, transferred := 0, 0, int64(0)
 	for _, ls := range s.localStats {
 		completed += ls.completed
@@ -81,12 +81,16 @@ func (s *stats) PrintStats() {
 	fmt.Printf("Request per second:         %.2f [#/sec]\n", float64(completed)/timeToke)
 	fmt.Printf("Transfer rate:              %.2f [Kbytes/sec]\n", float64(transferred)/1024/timeToke)
 
+	if process != nil {
+		process(s.ReadTime, "read_time")
+		process(s.WriteTime, "write_time")
+	}
 	if s.ReadTime.Len() > 0 {
-		printTime(s.ReadTime,"Read Times(ms)")
+		printTime(s.ReadTime, "Read Times(ms)")
 	}
 
 	if s.WriteTime.Len() > 0 {
-		printTime(s.WriteTime,"Write Times(ms)")
+		printTime(s.WriteTime, "Write Times(ms)")
 	}
 }
 

@@ -1,10 +1,13 @@
 package workloads
 
 import (
+	"common"
 	"distribution"
 	"driver"
 	"fmt"
 	"generator"
+	"os"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -183,6 +186,7 @@ func (w *Workload) generateRequest(wg *sync.WaitGroup, requestChan chan interfac
 	}
 	wg.Done()
 }
+
 func (w *Workload) Start() {
 	stats := NewStas(int(w.TotalProcess))
 	stats.total = w.RequestNum
@@ -203,5 +207,19 @@ func (w *Workload) Start() {
 
 	wg.Wait()
 	stats.end = time.Now()
-	stats.PrintStats()
+	stats.PrintStats(func(times *common.ConcurrentSlice, tag string) {
+		if times != nil {
+			f, err := os.Create(tag)
+			defer f.Close()
+			if err != nil {
+				fmt.Printf("%s: %v\n", err)
+				return
+			}
+			for d := range times.Iter() {
+				if t, ok := d.Value.(time.Duration); ok {
+					f.WriteString(fmt.Sprintf("%d", t))
+				}
+			}
+		}
+	})
 }
