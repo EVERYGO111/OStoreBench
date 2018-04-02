@@ -84,6 +84,7 @@ func (s *stats) PrintStats(process func(times *common.ConcurrentSlice, tag strin
 	if process != nil {
 		process(s.ReadTime, "read_time")
 		process(s.WriteTime, "write_time")
+		process(s.WriteFileSize, "write_file_size")
 	}
 	if s.ReadTime.Len() > 0 {
 		printTime(s.ReadTime, "Read Times(ms)")
@@ -92,6 +93,7 @@ func (s *stats) PrintStats(process func(times *common.ConcurrentSlice, tag strin
 	if s.WriteTime.Len() > 0 {
 		printTime(s.WriteTime, "Write Times(ms)")
 	}
+
 }
 
 func printTime(slice *common.ConcurrentSlice, tips string) {

@@ -33,6 +33,8 @@ type BenchmarkOptions struct {
 
 	workloadType *string
 	filesize     *int
+	requestNum   *int64 //for onlineservice
+
 }
 
 var (
@@ -50,6 +52,7 @@ func init() {
 	b.project = flag.String("project", "demo", "project name for swift")
 	b.workloadType = flag.String("t", ONLINE_SERVICE, "1: OnlineService, 2: Archive ")
 	b.filesize = flag.Int("filesize", 10240, "maximum file size")
+	b.requestNum = flag.Int64("reqnum", 10000, "request number")
 	flag.Parse()
 }
 func benchOnlineservice(driver driver.Driver) {
@@ -62,7 +65,7 @@ func benchOnlineservice(driver driver.Driver) {
 		FileSizeType: workloads.ZIPF,
 		IatType:      workloads.NEGATIVE_EXP, //the request rate will be lognormal distribution
 		RequestType:  workloads.LOGNORMAL,
-		RequestNum:   10000,
+		RequestNum:   *b.requestNum,
 	}
 	workloads := workloads.NewWorkload(workloadConf)
 	workloads.Start()

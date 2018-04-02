@@ -54,17 +54,25 @@ type Workload struct {
 }
 
 func loadGeneratorByType(t DistributionType) generator.Generator {
+	var args generator.GeneratorArgs = make(map[string]interface{})
 	switch t {
 	case ZIPF:
-		return generator.NewGeneratorImpl("zipf")
+		args["s"] = float64(1.5)
+		args["v"] = float64(2)
+		args["imax"] = float64(64 * 1024 * 1024)
+		return generator.NewGeneratorImpl("zipf", args)
 	case LOGNORMAL:
-		return generator.NewGeneratorImpl("lognormal")
+		return generator.NewGeneratorImpl("lognormal", args)
 	case POISSION:
-		return generator.NewGeneratorImpl("poission")
+		return generator.NewGeneratorImpl("poission", args)
 	case NEGATIVE_EXP:
-		return generator.NewGeneratorImpl("NegativeExp")
+		args["lambda"] = float64(0.05)
+		return generator.NewGeneratorImpl("NegativeExp", args)
 	default:
-		return generator.NewGeneratorImpl("zipf")
+		args["s"] = float64(1.5)
+		args["v"] = float64(2)
+		args["imax"] = float64(64 * 1024 * 1024)
+		return generator.NewGeneratorImpl("zipf", args)
 	}
 }
 
@@ -152,7 +160,7 @@ func (w *Workload) writeFiles(wg *sync.WaitGroup, requestChan chan interface{}, 
 				select {
 				case <-requestChan:
 					fileName := "weed_test_" + time.Now().String()
-					fileSize := w.fileSizeGenerator.Uint64() + 1 // filesize can not be 0
+					fileSize := w.fileSizeGenerator.Uint64() + 1024 // filesize can not be 0
 					start := time.Now()
 					if fileKey, err := w.driver.Put(BucketName, fileName, int64(fileSize)); err == nil {
 						w.appendFid(fileKey)
@@ -217,6 +225,8 @@ func (w *Workload) Start() {
 			for d := range times.Iter() {
 				if t, ok := d.Value.(time.Duration); ok {
 					f.WriteString(fmt.Sprintf("%d\n", t))
+				} else if s, ok := d.Value.(uint64); ok {
+					f.WriteString(fmt.Sprintf("%d\n", s))
 				}
 			}
 		}

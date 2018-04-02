@@ -10,12 +10,21 @@ type GeneratorImpl struct {
 	sync.Mutex
 }
 
-func NewGeneratorImpl(distr string) *GeneratorImpl {
+type GeneratorArgs map[string]interface{}
+
+func (args GeneratorArgs) Get(key string, defaultValue interface{}) interface{} {
+	if v, ok := args[key]; ok {
+		return v
+	}
+	return defaultValue
+}
+
+func NewGeneratorImpl(distr string, args GeneratorArgs) *GeneratorImpl {
 	switch distr {
 	case "NegativeExp":
-		return &GeneratorImpl{distri: distribution.NewNegativeExp(0.05)}
+		return &GeneratorImpl{distri: distribution.NewNegativeExp(args.Get("lamdda", 0.05).(float64))}
 	case "zipf":
-		return &GeneratorImpl{distri: distribution.NewZipf(1.5, 2, 64*1024*1024)}
+		return &GeneratorImpl{distri: distribution.NewZipf(args.Get("s", 1.5).(float64), args.Get("v", 2).(float64), args.Get("imax", 64*1024*1024).(uint64))}
 	}
 	return nil
 }
