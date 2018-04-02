@@ -4,9 +4,11 @@
 package workloads
 
 import (
+	"common"
 	"driver"
 	"fmt"
 	"math/rand"
+	"os"
 	"sync"
 	"time"
 )
@@ -87,5 +89,19 @@ func (w *ArchWorkload) Start() {
 	finishDone <- true
 	svg.Wait()
 
-	stats.PrintStats()
+	stats.PrintStats(func(times *common.ConcurrentSlice, tag string) {
+		if times != nil {
+			f, err := os.Create(tag)
+			defer f.Close()
+			if err != nil {
+				fmt.Printf("%s: %v\n", err)
+				return
+			}
+			for d := range times.Iter() {
+				if t, ok := d.Value.(time.Duration); ok {
+					f.WriteString(fmt.Sprintf("%d", t))
+				}
+			}
+		}
+	})
 }
