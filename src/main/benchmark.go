@@ -93,10 +93,8 @@ func loadDriverByType(t string) (driver.Driver, error) {
 	case "swift":
 		return driver.NewSwiftDriver(*b.username, *b.apiKey, *b.authUrl, *b.domain, *b.project), nil
 	case "ceph":
-
-		return nil, fmt.Errorf("Ceph driver has not been implemented yet!")
+		return driver.NewCephDriver(*b.username, *b.apiKey, *b.authUrl), nil
 	default:
-
 		return nil, fmt.Errorf("Ceph driver has not been implemented yet!")
 	}
 }
