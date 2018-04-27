@@ -59,7 +59,7 @@ func loadGeneratorByType(t DistributionType) generator.Generator {
 	case ZIPF:
 		args["s"] = float64(1.5)
 		args["v"] = float64(2)
-		args["imax"] = uint64(64 * 1024 * 1024)
+		args["imax"] = uint64(64 * 1024 * 1024) //64M
 		return generator.NewGeneratorImpl("zipf", args)
 	case LOGNORMAL:
 		return generator.NewGeneratorImpl("lognormal", args)
