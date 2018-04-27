@@ -10,7 +10,7 @@ func TestCephBasic(t *testing.T) {
 	driver := NewCephDriver(
 		"testuser:swift",
 		"KZMKDDmgJl9dCSkFQi1AzBAYLjNDSOwMqaqfCxM1", //password
-		"http://172.16.1.92:5000/v3",
+		"http://172.16.1.92:7480/auth/v1",
 	)
 
 	fileName := fmt.Sprintf("ceph_%d.txt", time.Now().UnixNano())
