@@ -47,7 +47,7 @@ func (w *ArchWorkload) sendRequest(wg *sync.WaitGroup, s *stats, index int) {
 		rqNum := r.Intn(w.config.MaxFilesPerGroup) + 1
 		for i := 0; i < rqNum; i++ {
 			fileSize := r.Int63n(w.config.MaxFileSize-w.config.MinFileSize) + w.config.MinFileSize
-			fileName := fmt.Sprintf("weed_archive_%d.txt", time.Now().UnixNano())
+			fileName := fmt.Sprintf("cfsb_archive_%d.txt", time.Now().UnixNano())
 			start := time.Now()
 			_, err := w.driver.Put(BucketName, fileName, fileSize)
 			if err != nil {
