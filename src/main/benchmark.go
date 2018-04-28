@@ -75,8 +75,8 @@ func benchArchiveService(driver driver.Driver) {
 	archWorkloadConf := workloads.ArchiveWorkloadConfig{
 		RequestGroups:    100,
 		GroupInteralTime: 5,
-		MinFileSize:      10,
-		MaxFileSize:      1024,
+		MinFileSize:      1024,
+		MaxFileSize:      2*1024*1024,
 		MaxFilesPerGroup: 10,
 		ProcessNum:       *b.concurrency,
 	}

@@ -14,13 +14,12 @@ package workloads
 //// different stage.
 //
 //
-//type MRWorkloadConfig struct {
-//	RequestGroups    int   //total groups
-//	GroupInteralTime int   //second
-//	MinFileSize      int64 //bytes
-//	MaxFileSize      int64 //bytes
-//	MaxFilesPerGroup int
-//
+type MRWorkloadConfig struct {
+	Stages int //read/write stages
+	MaxFileSize int64
+
+}
+
 //	ProcessNum int
 //}
 //
