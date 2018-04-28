@@ -34,7 +34,6 @@ type BenchmarkOptions struct {
 	workloadType *string
 	filesize     *int
 	requestNum   *int64 //for onlineservice
-
 }
 
 var (
