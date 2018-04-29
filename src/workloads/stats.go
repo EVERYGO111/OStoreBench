@@ -11,6 +11,7 @@ import (
 type stats struct {
 	ReadTime  *common.ConcurrentSlice
 	WriteTime *common.ConcurrentSlice
+	DeleteTime *common.ConcurrentSlice
 
 	ReadFileSize  *common.ConcurrentSlice
 	ReadFileIds   *common.ConcurrentSlice
@@ -32,6 +33,7 @@ func NewStas(n int) *stats {
 	return &stats{
 		ReadTime:      common.NewConcurrentSlice(),
 		WriteTime:     common.NewConcurrentSlice(),
+		DeleteTime:    common.NewConcurrentSlice(),
 		ReadFileSize:  common.NewConcurrentSlice(),
 		ReadFileIds:   common.NewConcurrentSlice(),
 		WriteFileSize: common.NewConcurrentSlice(),
@@ -84,6 +86,7 @@ func (s *stats) PrintStats(process func(times *common.ConcurrentSlice, tag strin
 	if process != nil {
 		process(s.ReadTime, "read_time")
 		process(s.WriteTime, "write_time")
+		process(s.DeleteTime, "delete_time")
 		process(s.WriteFileSize, "write_file_size")
 	}
 	if s.ReadTime.Len() > 0 {
@@ -94,6 +97,9 @@ func (s *stats) PrintStats(process func(times *common.ConcurrentSlice, tag strin
 		printTime(s.WriteTime, "Write Times(ms)")
 	}
 
+	if s.DeleteTime.Len() > 0{
+		printTime(s.DeleteTime, "Delete Times(ms)")
+	}
 }
 
 func printTime(slice *common.ConcurrentSlice, tips string) {
