@@ -184,7 +184,7 @@ func (w *MRWorkload) Start() {
 			}
 			for d := range times.Iter() {
 				if t, ok := d.Value.(time.Duration); ok {
-					f.WriteString(fmt.Sprintf("%d", t))
+					f.WriteString(fmt.Sprintf("%d\n", t))
 				} else if s, ok := d.Value.(int64); ok {
 					f.WriteString(fmt.Sprintf("%d\n", s))
 				}
