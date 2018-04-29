@@ -89,7 +89,7 @@ func benchArchiveService(driver driver.Driver) {
 func benchMRService(driver driver.Driver) {
 	mrWorkloadConf := workloads.MRWorkloadConfig{
 		Stages:       20,
-		MaxFileSize:  4 * 1024,
+		MaxFileSize:  64 * 1024 * 1024,
 		MaxOpInStage: 1000,
 		ProcessNum:   32,
 	}
