@@ -15,6 +15,7 @@ const (
 	MAX_FILE_COUNT  = 1048576
 	ONLINE_SERVICE  = "OnlineService"
 	ARCHIVE_SERVICE = "Archive"
+	MR_SERVICE = "MRService"
 )
 
 type BenchmarkOptions struct {
@@ -76,12 +77,23 @@ func benchArchiveService(driver driver.Driver) {
 		RequestGroups:    100,
 		GroupInteralTime: 5,
 		MinFileSize:      1024,
-		MaxFileSize:      2*1024*1024,
+		MaxFileSize:      2 * 1024 * 1024,
 		MaxFilesPerGroup: 10,
 		ProcessNum:       *b.concurrency,
 	}
 	//workload := workloads.NewArchWorkload(driver.NewFakeDriver("localhost", 8000), &archWorkloadConf)
 	workload := workloads.NewArchWorkload(driver, &archWorkloadConf)
+	workload.Start()
+}
+
+func benchMRService(driver driver.Driver) {
+	mrWorkloadConf := workloads.MRWorkloadConfig{
+		Stages:       20,
+		MaxFileSize:  4 * 1024,
+		MaxOpInStage: 1000,
+		ProcessNum:   32,
+	}
+	workload := workloads.NewMRWorkload(driver, &mrWorkloadConf)
 	workload.Start()
 }
 
@@ -164,5 +176,8 @@ func main() {
 		benchOnlineservice(driver)
 	case ARCHIVE_SERVICE:
 		benchArchiveService(driver)
+	case MR_SERVICE:
+		benchMRService(driver)
 	}
+
 }
