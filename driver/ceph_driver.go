@@ -1,9 +1,9 @@
 package driver
 
 import (
+	"github.com/KDF5000/COSB/utils"
 	"github.com/ncw/swift"
 	"math/rand"
-	"utils"
 )
 
 type CephDriver struct {

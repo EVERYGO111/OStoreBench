@@ -1,13 +1,13 @@
 package main
 
 import (
-	"driver"
 	"flag"
 	"fmt"
+	"github.com/KDF5000/COSB/driver"
+	"github.com/KDF5000/COSB/workloads"
 	"math/rand"
 	"runtime"
 	"time"
-	"workloads"
 )
 
 const (
@@ -15,7 +15,7 @@ const (
 	MAX_FILE_COUNT  = 1048576
 	ONLINE_SERVICE  = "OnlineService"
 	ARCHIVE_SERVICE = "Archive"
-	MR_SERVICE = "MRService"
+	MR_SERVICE      = "MRService"
 )
 
 type BenchmarkOptions struct {

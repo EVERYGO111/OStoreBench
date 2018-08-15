@@ -1,16 +1,16 @@
 package workloads
 
 import (
-	"common"
 	"fmt"
+	"github.com/KDF5000/COSB/common"
 	"math"
 	"sync"
 	"time"
 )
 
 type stats struct {
-	ReadTime  *common.ConcurrentSlice
-	WriteTime *common.ConcurrentSlice
+	ReadTime   *common.ConcurrentSlice
+	WriteTime  *common.ConcurrentSlice
 	DeleteTime *common.ConcurrentSlice
 
 	ReadFileSize  *common.ConcurrentSlice
@@ -97,7 +97,7 @@ func (s *stats) PrintStats(process func(times *common.ConcurrentSlice, tag strin
 		printTime(s.WriteTime, "Write Times(ms)")
 	}
 
-	if s.DeleteTime.Len() > 0{
+	if s.DeleteTime.Len() > 0 {
 		printTime(s.DeleteTime, "Delete Times(ms)")
 	}
 }

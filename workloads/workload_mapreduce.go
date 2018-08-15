@@ -1,10 +1,10 @@
 package workloads
 
 import (
-	"common"
 	"container/list"
-	"driver"
 	"fmt"
+	"github.com/KDF5000/COSB/common"
+	"github.com/KDF5000/COSB/driver"
 	"math/rand"
 	"os"
 	"sync"

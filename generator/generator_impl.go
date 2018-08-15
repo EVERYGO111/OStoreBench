@@ -1,7 +1,7 @@
 package generator
 
 import (
-	"distribution"
+	"github.com/KDF5000/COSB/distribution"
 	"sync"
 )
 

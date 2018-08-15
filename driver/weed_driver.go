@@ -1,10 +1,10 @@
 package driver
 
 import (
+	"github.com/KDF5000/COSB/utils"
 	"github.com/KDF5000/goseaweedfs"
 	"math/rand"
 	"time"
-	"utils"
 )
 
 type WeedDriver struct {

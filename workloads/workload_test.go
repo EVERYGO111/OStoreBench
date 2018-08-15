@@ -1,8 +1,8 @@
 package workloads
 
 import (
-	"distribution"
 	"fmt"
+	"github.com/KDF5000/COSB/distribution"
 	"sync"
 	"testing"
 )
