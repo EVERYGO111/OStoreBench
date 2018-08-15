@@ -1,7 +1,7 @@
 BINARY = main/cfsb
 
 GO_FLAGS = #-v
-SOURCE_DIR = main
+SOURCE_DIR = ./main
 
 appname := cfsb
 
