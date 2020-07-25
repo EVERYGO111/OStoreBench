@@ -4,8 +4,8 @@
 package workloads
 
 import (
-	"github.com/KDF5000/COSB/common"
-	"github.com/KDF5000/COSB/driver"
+	"github.com/KGXarwen/COSB/common"
+	"github.com/KGXarwen/COSB/driver"
 	"fmt"
 	"math/rand"
 	"os"

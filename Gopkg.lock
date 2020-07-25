@@ -4,7 +4,7 @@
 [[projects]]
   branch = "master"
   digest = "1:7e11c7634603d3df4ce7e5454a16697d4776efbd8991a852e9d4dd8b0fafd078"
-  name = "github.com/KDF5000/goseaweedfs"
+  name = "github.com/KGXarwen/goseaweedfs"
   packages = ["."]
   pruneopts = "UT"
   revision = "b9663bd40e6f2927089e9478bbd329b4754a4735"
@@ -39,7 +39,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/KDF5000/goseaweedfs",
+    "github.com/KGXarwen/goseaweedfs",
     "github.com/ncw/swift",
   ]
   solver-name = "gps-cdcl"

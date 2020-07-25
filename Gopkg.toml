@@ -27,7 +27,7 @@
 
 [[constraint]]
   branch = "master"
-  name = "github.com/KDF5000/goseaweedfs"
+  name = "github.com/KGXarwen/goseaweedfs"
 
 [[constraint]]
   name = "github.com/ncw/swift"

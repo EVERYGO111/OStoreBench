@@ -2,10 +2,10 @@ package workloads
 
 import (
 	"fmt"
-	"github.com/KDF5000/COSB/common"
-	"github.com/KDF5000/COSB/distribution"
-	"github.com/KDF5000/COSB/driver"
-	"github.com/KDF5000/COSB/generator"
+	"github.com/KGXarwen/COSB/common"
+	"github.com/KGXarwen/COSB/distribution"
+	"github.com/KGXarwen/COSB/driver"
+	"github.com/KGXarwen/COSB/generator"
 	"os"
 	"sync"
 	"time"

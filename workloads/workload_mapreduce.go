@@ -3,8 +3,8 @@ package workloads
 import (
 	"container/list"
 	"fmt"
-	"github.com/KDF5000/COSB/common"
-	"github.com/KDF5000/COSB/driver"
+	"github.com/KGXarwen/COSB/common"
+	"github.com/KGXarwen/COSB/driver"
 	"math/rand"
 	"os"
 	"sync"

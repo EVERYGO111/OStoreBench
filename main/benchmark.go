@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/KDF5000/COSB/driver"
-	"github.com/KDF5000/COSB/workloads"
+	"github.com/KGXarwen/COSB/driver"
+	"github.com/KGXarwen/COSB/workloads"
 	"math/rand"
 	"runtime"
 	"time"

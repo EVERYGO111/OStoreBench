@@ -1,8 +1,8 @@
 package driver
 
 import (
-	"github.com/KDF5000/COSB/utils"
-	"github.com/KDF5000/goseaweedfs"
+	"github.com/KGXarwen/COSB/utils"
+	"github.com/KGXarwen/goseaweedfs"
 	"math/rand"
 	"time"
 )

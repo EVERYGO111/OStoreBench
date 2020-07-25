@@ -2,8 +2,8 @@ package workloads
 
 import (
 	"fmt"
-	"github.com/KDF5000/COSB/distribution"
-	"github.com/KDF5000/COSB/driver"
+	"github.com/KGXarwen/COSB/distribution"
+	"github.com/KGXarwen/COSB/driver"
 	"math/rand"
 	"time"
 )

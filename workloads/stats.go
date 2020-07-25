@@ -2,7 +2,7 @@ package workloads
 
 import (
 	"fmt"
-	"github.com/KDF5000/COSB/common"
+	"github.com/KGXarwen/COSB/common"
 	"math"
 	"sync"
 	"time"
