@@ -7,7 +7,7 @@ The following figure is the main components of COSB. "Controller" receives user 
 ## How to Use
 1. Clone the project
 ```
-git clone git@github.com:KGXarwen/COSB.git
+git clone https://github.com/KGXarwen/COSB.git
 ```
 2. Complie
 ```
