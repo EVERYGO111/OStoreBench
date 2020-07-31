@@ -18,10 +18,12 @@ func NewWeeDriver(master string) *WeedDriver {
 }
 
 func (w *WeedDriver) Get(bucket string, key string) ([]byte, error) {
-	byteRead, err := w.client.GetFile(key)
-	if err != nil {
+	//kgx byteRead, err := w.client.GetFile(key)
+	fileName, byteRead, err := w.client.DownloadFile(key, nil)
+        if err != nil {
 		return nil, err
 	}
+        _=fileName
 	return byteRead, nil
 }
 
