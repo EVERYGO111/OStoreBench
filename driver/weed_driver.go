@@ -2,7 +2,7 @@ package driver
 
 import (
 	"github.com/KGXarwen/COSB/utils"
-	"github.com/KGXarwen/goseaweedfs"
+	"github.com/linxGnu/goseaweedfs"
 	"math/rand"
 	"time"
 )
