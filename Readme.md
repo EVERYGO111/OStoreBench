@@ -1,4 +1,5 @@
 OStoreBench(Object Store Benchmark) is a benchmark tool for distributed object storage systems. It supports Ceph、Openstack Swift and Seaweedfs now. OStoreBench can simulate application workloads in real world and replay log of applications.
+OStoreBench has been accepted by 2020 BenchCouncil International Symposium on Benchmarking, Measuring and Optimizing(bench'20).  But it  has not yet been published. In this paper, we implement OStoreBench, a scenario benchmark suite for distributed object storage systems and evaluate three state-of-the-practice object storage systems with OStoreBench. In the future, we plan to solve the hotspots problem.
 
 ## Architecture
 The following figure is the main components of OStoreBench. "Controller" receives user configuration and generates requests entries. The requests rate and requests body size satisfy specific distribution by using "Distribution Geneator". The request entries will be put intto "Request Queue" while the "Executor" fetches request entry continually to generate real requests to specific storage system.
