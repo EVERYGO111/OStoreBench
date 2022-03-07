@@ -45,4 +45,4 @@ Please modify the version of goseaweedfs in COSB/go.mod to v0.1.1
 ## Publications
 If you are using this benchmark for your papers or for your work, please cite the paper:
 
-OStoreBench: Benchmarking Distributed Object Storage Systems Using Real-World Application Scenarios Guoxin KangDefei KongLei WangJianfeng Zhan. In Benchmarking, Measuring, and Optimizing 2020.
+OStoreBench: Benchmarking Distributed Object Storage Systems Using Real-World Application Scenarios Guoxin Kang, Defei Kong, Lei Wang, Jianfeng Zhan. In Benchmarking, Measuring, and Optimizing 2020.
