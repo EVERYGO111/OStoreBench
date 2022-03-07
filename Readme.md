@@ -11,7 +11,7 @@ go version >= 1.13.x
 ## How to Use
 1. Clone the project
 ```
-git clone https://github.com/KGXarwen/COSB.git
+git clone https://github.com/EVETYGO111/OStoreBench.git
 ```
 2. cd COSB/
 
