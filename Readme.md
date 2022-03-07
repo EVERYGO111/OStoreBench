@@ -41,3 +41,8 @@ weed_driver.go:22:37: w.client.DownloadFile undefined (type *goseaweedfs.Seaweed
 weed_driver.go:31:17: assignment mismatch: 3 variables but w.client.Upload returns 2 values
 ```
 Please modify the version of goseaweedfs in COSB/go.mod to v0.1.1
+
+## Publications
+If you are using this benchmark for your papers or for your work, please cite the paper:
+
+OStoreBench: Benchmarking Distributed Object Storage Systems Using Real-World Application Scenarios Guoxin KangDefei KongLei WangJianfeng Zhan. In Benchmarking, Measuring, and Optimizing 2020.
